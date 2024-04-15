@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  
+  <title>Frontend Mentor | Crowdfunding product page</title>
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind play cdn ( for development and play purposes ) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="src/tailwind.config.js"></script>
+
+  <!-- Alpine.js -->
+  <!-- Alpine Plugins -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
+
+  <!-- Alpine Core -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+</head>
+<body x-data="fund()" class="antialiased bg-gray/5">
+
+<header class="absolute inset-x-0">
+  <section class="relative flex items-center justify-between gap-5 pt-8 px-6">
+    <img class="relative z-20" src="./images/logo.svg" alt="crowdfund">
+    <section class="relative">
+      <div class="md:hidden">
+        <button class="relative z-20" x-on:click="menuOpened = !menuOpened" type="button">
+          <img :class="menuOpened ? '' : 'hidden'" src="./images/icon-close-menu.svg" alt="close menu">
+          <img :class="menuOpened ? 'hidden' : ''" src="./images/icon-hamburger.svg" alt="open menu">
+        </button>
+        <div x-show="menuOpened" class="fixed inset-0 z-10 bg-gradient-to-b from-black/75 py-20 px-6">
+          <nav class="bg-white rounded-lg mt-2">
+            <ul>
+              <template x-for="item in menuItems">
+                <li class="p-6 border-b border-gray/20 last:border-transparent">
+                  <a class="leading-none text-lg font-medium hover:underline" :href="item.url" x-text="item.title"></a>
+                </li>
+              </template>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <nav class="hidden md:block md:relative md:z-20">
+        <ul class="flex gap-5">
+          <template x-for="item in menuItems">
+            <li>
+              <a class="text-white" :href="item.url" x-text="item.title"></a>
+            </li>
+          </template>
+        </ul>
+      </nav>
+    </section>
+  </section>
+</header>
+<main class="relative">
+  <div class="relative">
+    <div class="absolute inset-x-0 h-1/2 bg-gradient-to-b from-black/75"></div>
+    <picture>
+      <source srcset="./images/image-hero-mobile.jpg" media="(orientation:portrait)"/>
+      <img class="object-cover w-full" src="./images/image-hero-desktop.jpg" alt=""/>
+    </picture>
+  </div>
+  <div class="relative space-y-6">
+    <section>
+      <div class="mx-6 px-6 bg-white rounded-lg shadow -mt-14">
+        <img class="mx-auto -translate-y-7" src="./images/logo-mastercraft.svg" alt="mastercraft">
+        <h1 class="font-bold text-xl text-center px-6 leading-6 -mt-1">Mastercraft Bamboo Monitor Riser</h1>
+        <p class="text-sm text-gray text-center leading-6 pt-4 pb-6">A beautiful & handcrafted monitor stand to reduce neck and eye strain.</p>
+        <div class="flex gap-2 items-center">
+          <button
+              x-on:click="modalActive = true"
+              class="rounded-full bg-cyan font-bold px-4 py-4 grow"
+          >
+            <span class="text-white text-center">Back this project</span>
+          </button>
+          <button
+              x-on:click="bookmarked = !bookmarked" :class="bookmarked ? 'text-cyan' : 'text-black'"
+              class="rounded-full"
+          >
+            <span class="sr-only md:visible">Bookmark</span>
+            <img src="./images/icon-bookmark.svg" alt="">
+          </button>
+        </div>
+      </div>
+      <div class="mx-6 px-6 bg-white rounded-lg shadow">
+        <div>
+          <div>
+            <span>$<span x-text="backedAmount"></span></span>
+            <span>of</span>
+            <span>$<span x-text="total"></span></span>
+            <span>backed</span>
+          </div>
+          <div>
+            <span x-text="backersTotal"></span>
+            <span>total backers</span>
+          </div>
+          <div>
+            <span x-text="daysLeft"></span>
+            <span>days left</span>
+          </div>
+        </div>
+        <progress :max="total" :value="backedAmount"></progress>
+      </div>
+    </section>
+    <section class="mx-6 px-6 bg-white rounded-lg shadow">
+      <h2>About this project</h2>
+      <p>The Mastercraft Bamboo Monitor Riser is a sturdy and stylish platform that elevates your screen
+    to a more comfortable viewing height. Placing your monitor at eye level has the potential to improve
+    your posture and make you more comfortable while at work, helping you stay focused on the task at hand.</p>
+      <p>Featuring artisan craftsmanship, the simplicity of design creates extra desk space below your computer
+    to allow notepads, pens, and USB sticks to be stored under the stand.</p>
+      <ul>
+        <template x-for="reward in rewards">
+          <li :class="{'hidden': reward.minPledgeAmount === 1}">
+            <h3 x-text="reward.title"></h3>
+            <p>
+              Pledge $ <span x-text="reward.minPledgeAmount"></span>
+              or more
+            </p>
+            <p x-text="reward.description"></p>
+            <p>
+              <span x-text="reward.stock"></span>
+              <span>left</span>
+            </p>
+            <button x-on:click="modalActive = true">Select Reward</button>
+          </li>
+          <li>
+            <h3>Black Edition Stand</h3>
+            <p>Pledge $75 or more</p>
+            <p>You get a Black Special Edition computer stand and a personal thank you. You’ll be added to our Backer
+              member list. Shipping is included.</p>
+            <p>
+              <span>64</span>
+              <span>left</span>
+            </p>
+            <button x-on:click="modalActive = true">Select Reward</button>
+          </li>
+        </template>
+      </ul>
+    </section>
+  </div>
+</main>
+
+  <footer>
+    <section class="fixed bottom-0 inset-x-0 text-center text-xs py-1 bg-white opacity-0 translate-y-2 hover:opacity-90 hover:translate-y-0 transform transition ease-out duration-300 md:py-2">
+      <div class="px-2 text-center">
+        Challenge by <a class="hover:text-dark-cyan hover:underline ease-in-out duration-150" href="https://www.frontendmentor.io/challenges/clipboard-landing-page-5cc9bccd6c4c91111378ecb9" target="_blank">Frontend Mentor</a>.
+        Coded by <a class="hover:text-dark-cyan hover:underline ease-in-out duration-150" href="https://www.frontendmentor.io/profile/wendyhamel" target="_blank">Wendy Hamel</a>.
+      </div>
+    </section>
+  </footer>
+
+  <div x-show="modalActive" class="relative z-10" aria-labelledby="product-images-lightbox" role="dialog" aria-modal="true">
+    <div
+            x-show="modalActive"
+            x-transition:enter="ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/75 bg-opacity-75 transition-opacity"
+    ></div>
+
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div
+                x-show="modalActive"
+                x-transition:enter="ease-out duration-300"
+                x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                x-transition:leave="ease-in duration-200"
+                x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                class="relative transform overflow-hidden bg-white text-left transition-all sm:my-8 sm:w-full sm:max-w-[38rem] sm:p-6"
+        >
+          <div class="w-full text-end mb-4">
+            <button x-on:click="modalActive = false" type="button" class="relative rounded-md hover:text-cyan focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2">
+              <span class="sr-only">Close lightbox</span>
+              <img src="./images/icon-close-modal.svg" alt="">
+            </button>
+          </div>
+          <section>
+            <div class="relative">
+             <section>
+               <h2>Back this project</h2>
+               <p>Want to support us in bringing Mastercraft Bamboo Monitor Riser out in the world?</p>
+
+               <ul>
+                 <template x-for="reward in rewards">
+                   <li>
+                     <div></div>
+                     <div>
+                       <h3 x-text="reward.title"></h3>
+                       <p :class="{'hidden': reward.minPledgeAmount === 1}">
+                         Pledge $ <span x-text="reward.minPledgeAmount"></span>
+                         or more
+                       </p>
+                       <p :class="{'hidden': reward.stock === 'unlimited'}">
+                         <span x-text="reward.stock"></span> <span>left</span>
+                       </p>
+                       <p x-text="reward.description"></p>
+                     </div>
+                     <div>
+                       <p>Enter your pledge</p>
+                       <div>
+                         <label>$
+                           <input
+                               x-mask:dynamic="$money($input)"
+                               type="text"
+                               :value="reward.minPledgeAmount"
+                           >
+                         </label>
+                         <button>Continue</button>
+                       </div>
+                     </div>
+                   </li>
+                 </template>
+               </ul>
+             </section>
+              <section>
+                <img src="./images/icon-check.svg" alt="crowdfund">
+                <h2>Thanks for your support!</h2>
+                <p>
+                  Your pledge brings us one step closer to sharing Mastercraft Bamboo Monitor Riser worldwide. You will get
+                  an email once our campaign is completed.
+                </p>
+                <button>Got it!</button>
+              </section>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="src/crowdfund.js"></script>
+
+</body>
+</html>
