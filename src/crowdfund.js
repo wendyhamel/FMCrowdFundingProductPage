@@ -6,10 +6,11 @@ window.fund = function() {
 			{id:0, title: "Discover", url:"#"},
 			{id:0, title: "Get Started", url:"#"}
 		],
-		backersTotal: 5007,
+		backersTotal: '5,007',
 		daysLeft: 56,
-		total: 100000.00,
-		backedAmount: 89914.00,
+		total: '100,000',
+		backedAmount: '89,914',
+		backedPercentage: 89,
 		bookmarked: false,
 		rewards: [
 			{

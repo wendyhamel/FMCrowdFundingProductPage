@@ -17,6 +17,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="src/tailwind.config.js"></script>
 
+  <!-- styling -->
+  <link rel="stylesheet" type="text/css" href="./style/base.css">
+
   <!-- Alpine.js -->
   <!-- Alpine Plugins -->
   <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
@@ -70,8 +73,8 @@
     </picture>
   </div>
   <div class="relative space-y-6">
-    <section>
-      <div class="mx-6 px-6 bg-white rounded-lg shadow -mt-14">
+    <section class="space-y-6">
+      <div class="mx-6 px-6 pb-10 bg-white rounded-lg border border-gray/10 shadow-xs shadow-gray/20 -mt-14">
         <img class="mx-auto -translate-y-7" src="./images/logo-mastercraft.svg" alt="mastercraft">
         <h1 class="font-bold text-xl text-center px-6 leading-6 -mt-1">Mastercraft Bamboo Monitor Riser</h1>
         <p class="text-sm text-gray text-center leading-6 pt-4 pb-6">A beautiful & handcrafted monitor stand to reduce neck and eye strain.</p>
@@ -91,38 +94,47 @@
           </button>
         </div>
       </div>
-      <div class="mx-6 px-6 bg-white rounded-lg shadow">
-        <div>
-          <div>
-            <span>$<span x-text="backedAmount"></span></span>
-            <span>of</span>
-            <span>$<span x-text="total"></span></span>
-            <span>backed</span>
+      <div class="mx-6 pt-2 pb-10 bg-white rounded-lg border border-gray/10 shadow-xs shadow-gray/20">
+        <div class="text-center">
+          <div class="space-y-2 py-6">
+            <p class="text-3.5xl font-bold text-black tracking-wide">$<span x-text="backedAmount"></span></p>
+            <p class="text-gray text-sm">
+              <span>of</span>
+              <span>$<span x-text="total"></span></span>
+              <span>backed</span>
+            </p>
           </div>
-          <div>
-            <span x-text="backersTotal"></span>
-            <span>total backers</span>
+          <hr class="border-gray/20 w-1/4 mx-auto"/>
+          <div class="space-y-2 py-6">
+            <p class="text-3.5xl font-bold text-black tracking-wide" x-text="backersTotal"></p>
+            <p class="text-gray text-sm">total backers</p>
           </div>
-          <div>
-            <span x-text="daysLeft"></span>
-            <span>days left</span>
+          <hr class="border-gray/20 w-1/4 mx-auto"/>
+          <div class="space-y-2 py-6">
+            <p class="text-3.5xl font-bold text-black tracking-wide" x-text="daysLeft"></p>
+            <p class="text-gray text-sm">days left</p>
           </div>
         </div>
-        <progress :max="total" :value="backedAmount"></progress>
+        <div class="px-6 pt-1">
+          <div class="rounded-full w-full h-3 bg-gray/5">
+            <span :class="'block bg-cyan rounded-full h-full w-[' + backedPercentage +'%]'"></span>
+            <span class="sr-only" x-text="backedAmount"></span>
+          </div>
+        </div>
       </div>
     </section>
-    <section class="mx-6 px-6 bg-white rounded-lg shadow">
-      <h2>About this project</h2>
-      <p>The Mastercraft Bamboo Monitor Riser is a sturdy and stylish platform that elevates your screen
+    <section class="mx-6 px-6 py-10 bg-white rounded-lg border border-gray/10 shadow-xs shadow-gray/20">
+      <h2 class="font-bold text-lg leading-none pb-7">About this project</h2>
+      <p class="text-gray text-sm leading-6 pb-6">The Mastercraft Bamboo Monitor Riser is a sturdy and stylish platform that elevates your screen
     to a more comfortable viewing height. Placing your monitor at eye level has the potential to improve
     your posture and make you more comfortable while at work, helping you stay focused on the task at hand.</p>
-      <p>Featuring artisan craftsmanship, the simplicity of design creates extra desk space below your computer
+      <p class="text-gray text-sm leading-6 pb-9">Featuring artisan craftsmanship, the simplicity of design creates extra desk space below your computer
     to allow notepads, pens, and USB sticks to be stored under the stand.</p>
       <ul>
         <template x-for="reward in rewards">
-          <li :class="{'hidden': reward.minPledgeAmount === 1}">
-            <h3 x-text="reward.title"></h3>
-            <p>
+          <li :class="reward.minPledgeAmount === 1 ? 'hidden' : 'border border-gray/20 rounded-md p-6'">
+            <h3 class="font-bold text-sm leading-none" x-text="reward.title"></h3>
+            <p class="text-cyan text-sm font-medium">
               Pledge $ <span x-text="reward.minPledgeAmount"></span>
               or more
             </p>
