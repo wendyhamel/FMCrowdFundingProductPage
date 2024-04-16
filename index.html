@@ -72,7 +72,7 @@
       <img class="object-cover w-full" src="./images/image-hero-desktop.jpg" alt=""/>
     </picture>
   </div>
-  <div class="relative space-y-6">
+  <div class="relative space-y-6 mb-20">
     <section class="space-y-6">
       <div class="mx-6 px-6 pb-10 bg-white rounded-lg border border-gray/10 shadow-xs shadow-gray/20 -mt-14">
         <img class="mx-auto -translate-y-7" src="./images/logo-mastercraft.svg" alt="mastercraft">
@@ -123,7 +123,7 @@
         </div>
       </div>
     </section>
-    <section class="mx-6 px-6 py-10 bg-white rounded-lg border border-gray/10 shadow-xs shadow-gray/20">
+    <section class="mx-6 px-6 pt-10 pb-4 bg-white rounded-lg border border-gray/10 shadow-xs shadow-gray/20">
       <h2 class="font-bold text-lg leading-none pb-7">About this project</h2>
       <p class="text-gray text-sm leading-6 pb-6">The Mastercraft Bamboo Monitor Riser is a sturdy and stylish platform that elevates your screen
     to a more comfortable viewing height. Placing your monitor at eye level has the potential to improve
@@ -132,29 +132,18 @@
     to allow notepads, pens, and USB sticks to be stored under the stand.</p>
       <ul>
         <template x-for="reward in rewards">
-          <li :class="reward.minPledgeAmount === 1 ? 'hidden' : 'border border-gray/20 rounded-md p-6'">
+          <li :class="reward.minPledgeAmount === 1 ? 'hidden' : 'border border-gray/20 rounded-md p-6 mb-6'">
             <h3 class="font-bold text-sm leading-none" x-text="reward.title"></h3>
-            <p class="text-cyan text-sm font-medium">
-              Pledge $ <span x-text="reward.minPledgeAmount"></span>
+            <p class="pt-2 pb-6 text-cyan text-sm font-medium">
+              Pledge $<span x-text="reward.minPledgeAmount"></span>
               or more
             </p>
-            <p x-text="reward.description"></p>
-            <p>
-              <span x-text="reward.stock"></span>
-              <span>left</span>
+            <p class="text-gray text-sm leading-6 pb-6" x-text="reward.description"></p>
+            <p class="flex items-center gap-2 pb-6">
+              <span class="text-3.5xl font-bold" x-text="reward.stock"></span>
+              <span class="text-gray">left</span>
             </p>
-            <button x-on:click="modalActive = true">Select Reward</button>
-          </li>
-          <li>
-            <h3>Black Edition Stand</h3>
-            <p>Pledge $75 or more</p>
-            <p>You get a Black Special Edition computer stand and a personal thank you. You’ll be added to our Backer
-              member list. Shipping is included.</p>
-            <p>
-              <span>64</span>
-              <span>left</span>
-            </p>
-            <button x-on:click="modalActive = true">Select Reward</button>
+            <button type="button" class="rounded-full bg-cyan font-bold px-8 py-3.5 text-sm text-white text-center" x-on:click="modalActive = true">Select Reward</button>
           </li>
         </template>
       </ul>
