@@ -42,6 +42,8 @@ window.fund = function() {
 				stock: 0,
 			},
 		],
-		modalActive: false,
+		modalActive: true,
+		selectedReward: 1,
+		submitted: false,
 	}
 }

@@ -72,7 +72,7 @@
       <img class="object-cover w-full" src="./images/image-hero-desktop.jpg" alt=""/>
     </picture>
   </div>
-  <div class="relative space-y-6 mb-20">
+  <div class="relative space-y-6 mb-16 pb-3">
     <section class="space-y-6">
       <div class="mx-6 px-6 pb-10 bg-white rounded-lg border border-gray/10 shadow-xs shadow-gray/20 -mt-14">
         <img class="mx-auto -translate-y-7" src="./images/logo-mastercraft.svg" alt="mastercraft">
@@ -132,7 +132,7 @@
     to allow notepads, pens, and USB sticks to be stored under the stand.</p>
       <ul>
         <template x-for="reward in rewards">
-          <li :class="reward.minPledgeAmount === 1 ? 'hidden' : 'border border-gray/20 rounded-md p-6 mb-6'">
+          <li :class="reward.minPledgeAmount === 1 ? 'hidden' : 'relative border border-gray/20 rounded-md p-6 mb-6'">
             <h3 class="font-bold text-sm leading-none" x-text="reward.title"></h3>
             <p class="pt-2 pb-6 text-cyan text-sm font-medium">
               Pledge $<span x-text="reward.minPledgeAmount"></span>
@@ -143,7 +143,9 @@
               <span class="text-3.5xl font-bold" x-text="reward.stock"></span>
               <span class="text-gray">left</span>
             </p>
-            <button type="button" class="rounded-full bg-cyan font-bold px-8 py-3.5 text-sm text-white text-center" x-on:click="modalActive = true">Select Reward</button>
+            <button type="button" x-show="reward.stock != 0" class="rounded-full bg-cyan font-bold px-8 py-3.5 text-sm text-white text-center" x-on:click="modalActive = true">Select Reward</button>
+            <span x-show="reward.stock === 0" class="inline-flex rounded-full bg-gray/90 font-bold px-9 py-3.5 text-sm text-white text-center">Out of Stock</span>
+            <div :class="reward.stock === 0 ? 'absolute -inset-1 bg-white rounded-md opacity-50' : 'hidden'"></div>
           </li>
         </template>
       </ul>
@@ -160,85 +162,91 @@
     </section>
   </footer>
 
-  <div x-show="modalActive" class="relative z-10" aria-labelledby="product-images-lightbox" role="dialog" aria-modal="true">
+  <div x-show="modalActive" class="relative z-30" aria-labelledby="product-images-lightbox" role="dialog" aria-modal="true">
     <div
-            x-show="modalActive"
-            x-transition:enter="ease-out duration-300"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="ease-in duration-200"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-black/75 bg-opacity-75 transition-opacity"
+        x-show="modalActive"
+        x-transition:enter="ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 bg-black/60 transition-opacity"
     ></div>
 
     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+      <div class="flex min-h-full items-end justify-center px-6 pt-28 pb-32 text-center sm:items-center sm:p-0">
         <div
-                x-show="modalActive"
-                x-transition:enter="ease-out duration-300"
-                x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                x-transition:leave="ease-in duration-200"
-                x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                class="relative transform overflow-hidden bg-white text-left transition-all sm:my-8 sm:w-full sm:max-w-[38rem] sm:p-6"
+            x-show="modalActive"
+            x-transition:enter="ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+            x-transition:leave="ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+            x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            class="relative transform overflow-hidden mt-2.5 bg-white rounded-lg text-left transition-all sm:my-8 sm:w-full sm:max-w-[38rem] sm:p-6"
         >
-          <div class="w-full text-end mb-4">
-            <button x-on:click="modalActive = false" type="button" class="relative rounded-md hover:text-cyan focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2">
-              <span class="sr-only">Close lightbox</span>
-              <img src="./images/icon-close-modal.svg" alt="">
-            </button>
+          <div class="relative">
+            <section x-show="!submitted" class="px-6 pt-8 pb-6">
+              <div class="flex justify-between gap-6 items-center pt-0.5 pb-7">
+                <h2 class="font-bold text-lg leading-none">Back this project</h2>
+                <button x-on:click="modalActive = false" type="button" class="relative rounded-md hover:text-cyan focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2">
+                  <span class="sr-only">Close select reward modal</span>
+                  <img src="./images/icon-close-modal.svg" alt="">
+                </button>
+              </div>
+              <p class="text-gray text-sm leading-6 pb-6">Want to support us in bringing Mastercraft Bamboo Monitor Riser out in the world?</p>
+              <fieldset>
+                <legend class="sr-only">Select a reward</legend>
+                <template x-for="reward in rewards">
+                  <div :class="selectedReward === reward.id ? 'relative block border-2 border-cyan rounded-lg px-6 mb-6' : 'relative block border border-gray/30 rounded-lg px-6 mb-6'">
+                    <div :class="reward.minPledgeAmount === 1 ? ' flex gap-4 items-center pt-8' : ' flex gap-4 items-center pt-5'">
+                      <input x-show="reward.stock != 0" class="appearance-none cursor-pointer rounded-full ring-2 ring-gray/20 w-5 h-5 checked:border-4 checked:border-white checked:bg-cyan" type="radio" name="selectReward" value="reward.id" id="reward.id" x-model="selectedReward" x-on:input="selectedReward = reward.id">
+                      <span x-show="reward.stock === 0" class="block rounded-full ring-2 ring-gray/20 w-5 h-5 checked:border-4 checked:border-white checked:bg-cyan"></span>
+                      <div>
+                        <label for="reward.id" class="font-bold text-sm leading-none pb-1" x-text="reward.title"></label>
+                        <p :class="reward.minPledgeAmount === 1 ? 'hidden' : 'pt-1 text-cyan text-sm font-medium'">
+                          Pledge $ <span x-text="reward.minPledgeAmount"></span>
+                          or more
+                        </p>
+                      </div>
+                    </div>
+                    <div :class="reward.minPledgeAmount === 1 ? 'pt-9 pb-2' : 'pt-6 pb-7'">
+                      <p class="text-gray text-sm leading-6 pb-5" x-text="reward.description"></p>
+                      <p :class="{'hidden': reward.stock === 'unlimited'}">
+                        <span class="font-bold text-lg" x-text="reward.stock"></span><span class="ml-2 text-gray">left</span>
+                      </p>
+                    </div>
+                    <div x-show="selectedReward === reward.id">
+                      <label :for="'pledge-' + reward.id">Enter your pledge</label>
+                      <div>
+                        <div>$
+                          <input
+                              class=""
+                              x-mask:dynamic="$money($input)"
+                              type="text"
+                              :id="'pledge-' + reward.id"
+                              :value="reward.minPledgeAmount"
+                          >
+                        </div>
+                        <button class="rounded-full bg-cyan font-bold px-8 py-3.5 text-sm text-white text-center">Continue</button>
+                      </div>
+                    </div>
+                    <div :class="reward.stock === 0 ? 'absolute -inset-1 bg-white rounded-lg opacity-50' : 'hidden'"></div>
+                  </div>
+                </template>
+              </fieldset>
+            </section>
+            <section x-show="submitted">
+              <img src="./images/icon-check.svg" alt="crowdfund">
+              <h2>Thanks for your support!</h2>
+              <p>
+                Your pledge brings us one step closer to sharing Mastercraft Bamboo Monitor Riser worldwide. You will get
+                an email once our campaign is completed.
+              </p>
+              <button>Got it!</button>
+            </section>
           </div>
-          <section>
-            <div class="relative">
-             <section>
-               <h2>Back this project</h2>
-               <p>Want to support us in bringing Mastercraft Bamboo Monitor Riser out in the world?</p>
-
-               <ul>
-                 <template x-for="reward in rewards">
-                   <li>
-                     <div></div>
-                     <div>
-                       <h3 x-text="reward.title"></h3>
-                       <p :class="{'hidden': reward.minPledgeAmount === 1}">
-                         Pledge $ <span x-text="reward.minPledgeAmount"></span>
-                         or more
-                       </p>
-                       <p :class="{'hidden': reward.stock === 'unlimited'}">
-                         <span x-text="reward.stock"></span> <span>left</span>
-                       </p>
-                       <p x-text="reward.description"></p>
-                     </div>
-                     <div>
-                       <p>Enter your pledge</p>
-                       <div>
-                         <label>$
-                           <input
-                               x-mask:dynamic="$money($input)"
-                               type="text"
-                               :value="reward.minPledgeAmount"
-                           >
-                         </label>
-                         <button>Continue</button>
-                       </div>
-                     </div>
-                   </li>
-                 </template>
-               </ul>
-             </section>
-              <section>
-                <img src="./images/icon-check.svg" alt="crowdfund">
-                <h2>Thanks for your support!</h2>
-                <p>
-                  Your pledge brings us one step closer to sharing Mastercraft Bamboo Monitor Riser worldwide. You will get
-                  an email once our campaign is completed.
-                </p>
-                <button>Got it!</button>
-              </section>
-            </div>
-          </section>
         </div>
       </div>
     </div>
