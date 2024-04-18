@@ -17,7 +17,7 @@ window.fund = function() {
 				id: 0,
 				title: "Pledge with no reward",
 				description: "Choose to support us without a reward if you simply believe in our project. As a backer, you will be signed up to receive product updates via email.",
-				minPledgeAmount: 1,
+				minPledgeAmount: null,
 				stock: "unlimited",
 			},
 			{
@@ -42,8 +42,8 @@ window.fund = function() {
 				stock: 0,
 			},
 		],
-		modalActive: true,
-		selectedReward: 1,
+		modalActive: false,
+		selectedReward: null,
 		submitted: false,
 	}
 }

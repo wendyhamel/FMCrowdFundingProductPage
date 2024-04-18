@@ -132,7 +132,7 @@
     to allow notepads, pens, and USB sticks to be stored under the stand.</p>
       <ul>
         <template x-for="reward in rewards">
-          <li :class="reward.minPledgeAmount === 1 ? 'hidden' : 'relative border border-gray/20 rounded-md p-6 mb-6'">
+          <li :class="reward.minPledgeAmount === null ? 'hidden' : 'relative border border-gray/20 rounded-md p-6 mb-6'">
             <h3 class="font-bold text-sm leading-none" x-text="reward.title"></h3>
             <p class="pt-2 pb-6 text-cyan text-sm font-medium">
               Pledge $<span x-text="reward.minPledgeAmount"></span>
@@ -175,7 +175,7 @@
     ></div>
 
     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-      <div class="flex min-h-full items-end justify-center px-6 pt-28 pb-32 text-center sm:items-center sm:p-0">
+      <div class="flex min-h-full items-end justify-center pt-28 px-6 pb-32 text-center">
         <div
             x-show="modalActive"
             x-transition:enter="ease-out duration-300"
@@ -184,7 +184,7 @@
             x-transition:leave="ease-in duration-200"
             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            class="relative transform overflow-hidden mt-2.5 bg-white rounded-lg text-left transition-all sm:my-8 sm:w-full sm:max-w-[38rem] sm:p-6"
+            class="relative transform overflow-hidden mt-2.5 bg-white rounded-lg text-left transition-all"
         >
           <div class="relative">
             <section x-show="!submitted" class="px-6 pt-8 pb-6">
@@ -199,10 +199,13 @@
               <fieldset>
                 <legend class="sr-only">Select a reward</legend>
                 <template x-for="reward in rewards">
-                  <div :class="selectedReward === reward.id ? 'relative block border-2 border-cyan rounded-lg px-6 mb-6' : 'relative block border border-gray/30 rounded-lg px-6 mb-6'">
-                    <div :class="reward.minPledgeAmount === 1 ? ' flex gap-4 items-center pt-8' : ' flex gap-4 items-center pt-5'">
-                      <input x-show="reward.stock != 0" class="appearance-none cursor-pointer rounded-full ring-2 ring-gray/20 w-5 h-5 checked:border-4 checked:border-white checked:bg-cyan" type="radio" name="selectReward" value="reward.id" id="reward.id" x-model="selectedReward" x-on:input="selectedReward = reward.id">
-                      <span x-show="reward.stock === 0" class="block rounded-full ring-2 ring-gray/20 w-5 h-5 checked:border-4 checked:border-white checked:bg-cyan"></span>
+                  <div :class="selectedReward === reward.id ? 'relative block border-2 border-cyan rounded-lg mb-6' : 'relative block border border-gray/30 rounded-lg mb-6'">
+                    <div :class="reward.minPledgeAmount === 1 ? 'flex gap-4 items-center px-6 pt-8' : 'flex gap-4 items-center px-6 pt-5'">
+                      <div x-show="reward.stock != 0" class="grid place-items-center">
+                        <input class="relative appearance-none cursor-pointer rounded-full ring-2 ring-gray/20 w-5 h-5" type="radio" name="selectReward" value="reward.id" id="reward.id" x-model="selectedReward" x-on:input="selectedReward = reward.id">
+                        <span x-show="selectedReward === reward.id" class="absolute w-3 h-3 rounded-full bg-cyan pointer-events-none"></span>
+                      </div>
+                      <span x-show="reward.stock === 0" class="block rounded-full ring-2 ring-gray/20 w-5 h-5"></span>
                       <div>
                         <label for="reward.id" class="font-bold text-sm leading-none pb-1" x-text="reward.title"></label>
                         <p :class="reward.minPledgeAmount === 1 ? 'hidden' : 'pt-1 text-cyan text-sm font-medium'">
@@ -211,25 +214,26 @@
                         </p>
                       </div>
                     </div>
-                    <div :class="reward.minPledgeAmount === 1 ? 'pt-9 pb-2' : 'pt-6 pb-7'">
+                    <div :class="reward.minPledgeAmount === 1 ? 'px-6 pt-9 pb-2' : 'px-6 pt-5 pb-5 mt-0.5'">
                       <p class="text-gray text-sm leading-6 pb-5" x-text="reward.description"></p>
                       <p :class="{'hidden': reward.stock === 'unlimited'}">
                         <span class="font-bold text-lg" x-text="reward.stock"></span><span class="ml-2 text-gray">left</span>
                       </p>
                     </div>
-                    <div x-show="selectedReward === reward.id">
-                      <label :for="'pledge-' + reward.id">Enter your pledge</label>
-                      <div>
-                        <div>$
+                    <div x-show="selectedReward === reward.id" class="border-t-2 border-gray/20 p-6">
+                      <label class="inline-block text-gray text-sm text-center w-full mb-4" :for="'pledge-' + reward.id">Enter your pledge</label>
+                      <div class="flex justify-between items-center gap-4">
+                        <div class="w-full flex items-baseline gap-2 rounded-full border border-gray/30 pl-6 focus-within:border-cyan">
+                          <span class="text-gray/80 font-bold text-sm">$</span>
                           <input
-                              class=""
+                              class="w-full rounded-r-full py-3.5 pr-2 font-bold text-sm focus:outline-none"
                               x-mask:dynamic="$money($input)"
                               type="text"
                               :id="'pledge-' + reward.id"
                               :value="reward.minPledgeAmount"
                           >
                         </div>
-                        <button class="rounded-full bg-cyan font-bold px-8 py-3.5 text-sm text-white text-center">Continue</button>
+                        <button x-on:click="submitted = true" class="rounded-full bg-cyan font-bold px-7 py-3.5 text-sm text-white text-center">Continue</button>
                       </div>
                     </div>
                     <div :class="reward.stock === 0 ? 'absolute -inset-1 bg-white rounded-lg opacity-50' : 'hidden'"></div>
@@ -237,14 +241,14 @@
                 </template>
               </fieldset>
             </section>
-            <section x-show="submitted">
-              <img src="./images/icon-check.svg" alt="crowdfund">
-              <h2>Thanks for your support!</h2>
-              <p>
+            <section x-show="submitted" class="px-6 py-8 grid place-content-center gap-6">
+              <img class="mx-auto" src="./images/icon-check.svg" alt="crowdfund">
+              <h2 class="text-center font-bold text-lg leading-none">Thanks for your support!</h2>
+              <p class="text-center text-gray text-sm leading-6 pb-5">
                 Your pledge brings us one step closer to sharing Mastercraft Bamboo Monitor Riser worldwide. You will get
                 an email once our campaign is completed.
               </p>
-              <button>Got it!</button>
+              <button x-on:click="modalActive = false; submitted = false" class="mx-auto rounded-full bg-cyan font-bold px-7 py-3.5 text-sm text-white text-center">Got it!</button>
             </section>
           </div>
         </div>
