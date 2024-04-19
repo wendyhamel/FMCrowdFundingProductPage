@@ -6,10 +6,10 @@ window.fund = function() {
 			{id:0, title: "Discover", url:"#"},
 			{id:0, title: "Get Started", url:"#"}
 		],
-		backersTotal: '5,007',
+		backersTotal: 5007,
 		daysLeft: 56,
-		total: '100,000',
-		backedAmount: '89,914',
+		total: 100000,
+		backedAmount: 89914,
 		backedPercentage: 89,
 		bookmarked: false,
 		rewards: [
@@ -17,7 +17,7 @@ window.fund = function() {
 				id: 0,
 				title: "Pledge with no reward",
 				description: "Choose to support us without a reward if you simply believe in our project. As a backer, you will be signed up to receive product updates via email.",
-				minPledgeAmount: null,
+				minPledgeAmount: 0.01,
 				stock: "unlimited",
 			},
 			{
@@ -43,7 +43,32 @@ window.fund = function() {
 			},
 		],
 		modalActive: false,
-		selectedReward: null,
+		selectedRewardId: null,
 		submitted: false,
+		showPledgedAmount() {
+			if(this.pledgedAmount < this.selectedReward.minPledgeAmount) {
+				return this.selectedReward.minPledgeAmount
+			} else {
+
+			}
+		},
+		backers: [],
+		submit(selectedReward, pledgedAmount) {
+			console.log(this.backedAmount)
+			console.log(pledgedAmount)
+			let backer = []
+			backer.id = Date.now()
+			backer.pledgedAmount = pledgedAmount
+			backer.rewardId = selectedReward.id
+			this.backers.push(backer)
+			if(selectedReward.id !== 0) {
+				this.rewards.find(reward => reward.id === selectedReward.id).stock--
+			}
+			this.backersTotal++;
+			this.backedAmount = this.backedAmount + backer.pledgedAmount
+			this.submitted = true
+			console.log(this.backers)
+			console.log(this.backedAmount)
+		},
 	}
 }
