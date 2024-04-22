@@ -10,7 +10,12 @@ window.fund = function() {
 		daysLeft: 56,
 		total: 100000,
 		backedAmount: 89914,
-		backedPercentage: 89,
+		getBackedPercentage() {
+			if(this.backedAmount < this.total ) {
+				return Math.round((this.backedAmount / this.total) * 100).toFixed(2)
+			}
+			return 100
+		},
 		bookmarked: false,
 		rewards: [
 			{
@@ -45,30 +50,44 @@ window.fund = function() {
 		modalActive: false,
 		selectedRewardId: null,
 		submitted: false,
-		showPledgedAmount() {
-			if(this.pledgedAmount < this.selectedReward.minPledgeAmount) {
-				return this.selectedReward.minPledgeAmount
+		backers: [],
+		pledgedAmount: null,
+		makePledge(rewardId) {
+			this.modalActive = true
+			this.selectedRewardId = rewardId
+		},
+		showInUsDollars(amount) {
+			return new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD',}).format(amount).replace(/(.|,)00$/g, '')
+		},
+		getPledgedAmount(selectedReward, pledgedAmount) {
+			if(pledgedAmount) {
+				if(Number(pledgedAmount) < selectedReward.minPledgeAmount) {
+					alert('Sorry, the pledged amount must be greater than ' + selectedReward.minPledgeAmount + ' to get the ' + selectedReward.title + '.')
+					return false
+				} else {
+					return pledgedAmount
+				}
 			} else {
-
+				return pledgedAmount = selectedReward.minPledgeAmount
 			}
 		},
-		backers: [],
 		submit(selectedReward, pledgedAmount) {
-			console.log(this.backedAmount)
-			console.log(pledgedAmount)
-			let backer = []
+			let backer = {}
+			this.pledgedAmount = Number(this.getPledgedAmount(selectedReward, pledgedAmount))
 			backer.id = Date.now()
-			backer.pledgedAmount = pledgedAmount
+			backer.pledgedAmount = this.pledgedAmount
 			backer.rewardId = selectedReward.id
 			this.backers.push(backer)
 			if(selectedReward.id !== 0) {
 				this.rewards.find(reward => reward.id === selectedReward.id).stock--
 			}
+			this.backedAmount = this.backedAmount + this.pledgedAmount
+			if(this.pledgedAmount) {
+				this.submitted = true
+			}
+			this.pledgedAmount = null
 			this.backersTotal++;
-			this.backedAmount = this.backedAmount + backer.pledgedAmount
-			this.submitted = true
-			console.log(this.backers)
-			console.log(this.backedAmount)
+
 		},
 	}
 }

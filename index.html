@@ -94,10 +94,10 @@
       <div class="mx-6 pt-2 pb-10 bg-white rounded-lg border border-gray/10 shadow-xs shadow-gray/20">
         <div class="text-center">
           <div class="space-y-2 py-6">
-            <p class="text-3.5xl font-bold text-black tracking-wide">$<span x-text="backedAmount.toLocaleString()"></span></p>
+            <p class="text-3.5xl font-bold text-black tracking-wide"><span x-text="showInUsDollars(backedAmount)"></span></p>
             <p class="text-gray text-sm">
               <span>of</span>
-              <span>$<span x-text="total.toLocaleString()"></span></span>
+              <span x-text="showInUsDollars(total)"></span>
               <span>backed</span>
             </p>
           </div>
@@ -114,7 +114,7 @@
         </div>
         <div class="px-6 pt-1">
           <div class="rounded-full w-full h-3 bg-gray/5">
-            <span :class="'block bg-cyan rounded-full h-full w-[' + backedPercentage +'%]'"></span>
+            <span :class="'block bg-cyan rounded-full h-full w-[' + getBackedPercentage() +'%]' "></span>
             <span class="sr-only" x-text="backedAmount"></span>
           </div>
         </div>
@@ -140,7 +140,7 @@
               <span class="text-3.5xl font-bold" x-text="reward.stock"></span>
               <span class="text-gray">left</span>
             </p>
-            <button type="button" x-show="reward.stock != 0" class="rounded-full bg-cyan font-bold px-8 py-3.5 text-sm text-white text-center" x-on:click="modalActive = true">Select Reward</button>
+            <button type="button" x-show="reward.stock != 0" class="rounded-full bg-cyan font-bold px-8 py-3.5 text-sm text-white text-center" x-on:click="makePledge(reward.id)">Select Reward</button>
             <span x-show="reward.stock === 0" class="inline-flex rounded-full bg-gray/90 font-bold px-9 py-3.5 text-sm text-white text-center">Out of Stock</span>
             <div :class="reward.stock === 0 ? 'absolute -inset-1 bg-white rounded-md opacity-50' : 'hidden'"></div>
           </li>
@@ -218,16 +218,16 @@
                       </p>
                     </div>
                     <div x-show="selectedRewardId === reward.id" class="border-t-2 border-gray/20 p-6">
-                      <label class="inline-block text-gray text-sm text-center w-full mb-4" :for="'pledge-' + reward.id">Enter your pledge</label>
+                      <label class="inline-block text-gray text-sm text-center w-full mb-4" :for="'pledge_reward_' + reward.id">Enter your pledge</label>
                       <div class="flex justify-between items-center gap-4">
                         <div class="w-full flex items-baseline gap-2 rounded-full border border-gray/30 pl-6 focus-within:border-cyan">
                           <span class="text-gray/80 font-bold text-sm">$</span>
                           <input
-                              class="w-full rounded-r-full py-3.5 pr-2 font-bold text-sm focus:outline-none"
-                              x-mask:dynamic="$money($input)"
-                              type="text"
-                              :id="'pledge-' + reward.id"
-                              :value="reward.minPledgeAmount"
+                              class="w-full rounded-r-full py-3.5 pr-2 font-bold text-sm focus:outline-none caret-cyan"
+                              type="number"
+                              :id="'pledge_reward_' + reward.id"
+                              x-model="pledgedAmount"
+                              :placeholder="reward.minPledgeAmount"
                           >
                         </div>
                         <button type="button" x-on:click="submit(reward, pledgedAmount)" class="rounded-full bg-cyan font-bold px-7 py-3.5 text-sm text-white text-center">Continue</button>
