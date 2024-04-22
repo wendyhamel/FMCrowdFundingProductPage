@@ -75,7 +75,7 @@
         <img class="mx-auto -translate-y-7" src="./images/logo-mastercraft.svg" alt="mastercraft">
         <h1 class="font-bold text-xl text-center px-6 leading-6 -mt-1 lg:text-2.5xl lg:text-medium">Mastercraft Bamboo Monitor Riser</h1>
         <p class="text-sm text-gray text-center leading-6 pt-4 pb-6 lg:text-base lg:pt-3 lg:pb-9">A beautiful & handcrafted monitor stand to reduce neck and eye strain.</p>
-        <div class="flex gap-2 items-center md:justify-between lg:px-6">
+        <div class="flex gap-2 items-center sm:justify-center sm:gap-6 lg:justify-between lg:px-6">
           <button
               x-on:click="modalActive = true"
               class="rounded-full bg-cyan font-bold px-4 py-4 grow md:grow-0 md:px-6 lg:px-10 hover:bg-dark-cyan focus:outline-none focus:ring-2 focus:ring-cyan focus:ring-offset-2 transition ease-out duration-150"
@@ -84,7 +84,7 @@
           </button>
           <button
               x-on:click="bookmarked = !bookmarked" :class="bookmarked ? 'text-dark-cyan' : 'text-gray'"
-              class="rounded-full group md:flex md:gap-4 md:items-center md:bg-gray/10 md:pr-6 transition ease-out duration-150"
+              class="rounded-full group sm:flex sm:gap-4 sm:items-center sm:bg-gray/10 sm:pr-6 transition ease-out duration-150"
           >
 <!--            <div class="grid place-content-center">-->
 <!--              <img x-show="!bookmarked" x-transition.opacity.duration.150 class="col-start-1 row-start-1" src="./images/icon-bookmark.svg" alt="">-->
@@ -106,7 +106,7 @@
                 </g>
               </svg>
             </div>
-            <span class="sr-only md:not-sr-only md:font-bold" x-text="bookmarked ? 'Bookmarked' : 'Bookmark'"></span>
+            <span class="sr-only sm:not-sr-only sm:font-bold" x-text="bookmarked ? 'Bookmarked' : 'Bookmark'"></span>
           </button>
         </div>
       </div>
