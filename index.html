@@ -29,7 +29,7 @@
 <body x-data="fund()" class="antialiased bg-gray/5">
 
 <header class="absolute inset-x-0">
-  <section class="relative flex items-center justify-between gap-5 pt-8 px-6">
+  <section class="relative flex items-center justify-between gap-5 pt-8 px-6 lg:max-w-[1158px] lg:mx-auto lg:pt-10">
     <img class="relative z-20" src="./images/logo.svg" alt="crowdfund">
     <section class="relative">
       <div class="md:hidden">
@@ -50,10 +50,10 @@
         </div>
       </div>
       <nav class="hidden md:block md:relative md:z-20">
-        <ul class="flex gap-5">
+        <ul class="flex gap-7">
           <template x-for="item in menuItems">
             <li>
-              <a class="text-white" :href="item.url" x-text="item.title"></a>
+              <a class="text-white text-sm font-medium" :href="item.url" x-text="item.title"></a>
             </li>
           </template>
         </ul>
@@ -63,56 +63,75 @@
 </header>
 <main class="relative">
   <div class="relative">
-    <div class="absolute inset-x-0 h-1/2 bg-gradient-to-b from-black/75"></div>
+    <div class="absolute inset-x-0 h-1/2 bg-gradient-to-b from-black/75 lg:from-black-10 lg:h-1/4"></div>
     <picture>
       <source srcset="./images/image-hero-mobile.jpg" media="(orientation:portrait)"/>
       <img class="object-cover w-full" src="./images/image-hero-desktop.jpg" alt=""/>
     </picture>
   </div>
-  <div class="relative space-y-6 mb-16 pb-3">
-    <section class="space-y-6">
-      <div class="mx-6 px-6 pb-10 bg-white rounded-lg border border-gray/10 shadow-xs shadow-gray/20 -mt-14">
+  <div class="relative space-y-6 mb-16 pb-3 lg:mb-28">
+    <section class="space-y-6 mx-1 lg:max-w-screen-md lg:mx-auto">
+      <div class="mx-5 px-6 pb-10 bg-white rounded-lg border border-gray/10 shadow-xs shadow-gray/20 -mt-14 lg:-mt-24 lg:pb-12">
         <img class="mx-auto -translate-y-7" src="./images/logo-mastercraft.svg" alt="mastercraft">
-        <h1 class="font-bold text-xl text-center px-6 leading-6 -mt-1">Mastercraft Bamboo Monitor Riser</h1>
-        <p class="text-sm text-gray text-center leading-6 pt-4 pb-6">A beautiful & handcrafted monitor stand to reduce neck and eye strain.</p>
-        <div class="flex gap-2 items-center">
+        <h1 class="font-bold text-xl text-center px-6 leading-6 -mt-1 lg:text-2.5xl lg:text-medium">Mastercraft Bamboo Monitor Riser</h1>
+        <p class="text-sm text-gray text-center leading-6 pt-4 pb-6 lg:text-base lg:pt-3 lg:pb-9">A beautiful & handcrafted monitor stand to reduce neck and eye strain.</p>
+        <div class="flex gap-2 items-center md:justify-between lg:px-6">
           <button
               x-on:click="modalActive = true"
-              class="rounded-full bg-cyan font-bold px-4 py-4 grow"
+              class="rounded-full bg-cyan font-bold px-4 py-4 grow md:grow-0 md:px-6 lg:px-10 hover:bg-dark-cyan focus:outline-none focus:ring-2 focus:ring-cyan focus:ring-offset-2 transition ease-out duration-150"
           >
             <span class="text-white text-center">Back this project</span>
           </button>
           <button
-              x-on:click="bookmarked = !bookmarked" :class="bookmarked ? 'text-cyan' : 'text-black'"
-              class="rounded-full"
+              x-on:click="bookmarked = !bookmarked" :class="bookmarked ? 'text-dark-cyan' : 'text-gray'"
+              class="rounded-full group md:flex md:gap-4 md:items-center md:bg-gray/10 md:pr-6 transition ease-out duration-150"
           >
-            <span class="sr-only md:visible">Bookmark</span>
-            <img src="./images/icon-bookmark.svg" alt="">
+<!--            <div class="grid place-content-center">-->
+<!--              <img x-show="!bookmarked" x-transition.opacity.duration.150 class="col-start-1 row-start-1" src="./images/icon-bookmark.svg" alt="">-->
+<!--              <img x-show="bookmarked" x-transition.opacity.duration.150 class="col-start-1 row-start-1" src="./images/icon-bookmarked.svg" alt="">-->
+<!--            </div>-->
+            <div
+                :class="bookmarked ? 'bg-dark-cyan text-white group-hover:bg-cyan group-hover:text-white/80' : 'bg-black group-hover:bg-gray group-hover:text-white/50'"
+                class="rounded-full transition ease-out duration-150"
+            >
+              <svg
+                  class="text-current"
+                  width="56"
+                  height="56"
+                  xmlns="http://www.w3.org/2000/svg"
+              >
+                <g fill="none" fill-rule="evenodd">
+                  <circle fill="transparent" cx="28" cy="28" r="28"/>
+                  <path fill="currentColor" d="M23 19v18l5-5.058L33 37V19z"/>
+                </g>
+              </svg>
+            </div>
+            <span class="sr-only md:not-sr-only md:font-bold" x-text="bookmarked ? 'Bookmarked' : 'Bookmark'"></span>
           </button>
         </div>
       </div>
-      <div class="mx-6 pt-2 pb-10 bg-white rounded-lg border border-gray/10 shadow-xs shadow-gray/20">
-        <div class="text-center">
-          <div class="space-y-2 py-6">
+      <div class="mx-5 pt-2 pb-10 bg-white rounded-lg border border-gray/10 shadow-xs shadow-gray/20 lg:pt-6 lg:pb-12">
+        <div class="text-center lg:text-start lg:flex lg:items-center lg:px-11">
+          <div class="space-y-2 py-6 lg:space-y-1 lg:pr-1">
             <p class="text-3.5xl font-bold text-black tracking-wide"><span x-text="showInUsDollars(backedAmount)"></span></p>
-            <p class="text-gray text-sm">
+            <p class="text-gray text-sm lg:text-base">
               <span>of</span>
               <span x-text="showInUsDollars(total)"></span>
               <span>backed</span>
             </p>
           </div>
-          <hr class="border-gray/20 w-1/4 mx-auto"/>
-          <div class="space-y-2 py-6">
+          <hr class="border-gray/20 w-1/4 mx-auto lg:w-16 lg:transform lg:rotate-90 lg:mx-0"/>
+          <div class="space-y-2 py-6 lg:space-y-1 lg:pl-5 lg:pr-12">
             <p class="text-3.5xl font-bold text-black tracking-wide" x-text="backersTotal.toLocaleString()"></p>
-            <p class="text-gray text-sm">total backers</p>
+            <p class="text-gray text-sm lg:text-base">total backers</p>
           </div>
-          <hr class="border-gray/20 w-1/4 mx-auto"/>
-          <div class="space-y-2 py-6">
+          <hr class="border-gray/20 w-1/4 mx-auto lg:w-16 lg:transform lg:rotate-90 lg:mx-0 lg:pt-1"/>
+          <div class="space-y-2 py-6 lg:space-y-1 lg:pl-4">
             <p class="text-3.5xl font-bold text-black tracking-wide" x-text="daysLeft"></p>
-            <p class="text-gray text-sm">days left</p>
+            <p class="text-gray text-sm lg:text-base">days left</p>
           </div>
         </div>
-        <div class="px-6 pt-1">
+        <div class="px-6 pt-1 lg:px-12 lg:pt-2">
           <div class="rounded-full w-full h-3 bg-gray/5">
             <span :class="'block bg-cyan rounded-full h-full w-[' + getBackedPercentage() +'%]' "></span>
             <span class="sr-only" x-text="backedAmount"></span>
@@ -120,32 +139,40 @@
         </div>
       </div>
     </section>
-    <section class="mx-6 px-6 pt-10 pb-4 bg-white rounded-lg border border-gray/10 shadow-xs shadow-gray/20">
-      <h2 class="font-bold text-lg leading-none pb-7">About this project</h2>
-      <p class="text-gray text-sm leading-6 pb-6">The Mastercraft Bamboo Monitor Riser is a sturdy and stylish platform that elevates your screen
-    to a more comfortable viewing height. Placing your monitor at eye level has the potential to improve
-    your posture and make you more comfortable while at work, helping you stay focused on the task at hand.</p>
-      <p class="text-gray text-sm leading-6 pb-9">Featuring artisan craftsmanship, the simplicity of design creates extra desk space below your computer
-    to allow notepads, pens, and USB sticks to be stored under the stand.</p>
-      <ul>
-        <template x-for="reward in rewards">
-          <li :class="reward.minPledgeAmount < 1 ? 'hidden' : 'relative border border-gray/20 rounded-md p-6 mb-6'">
-            <h3 class="font-bold text-sm leading-none" x-text="reward.title"></h3>
-            <p class="pt-2 pb-6 text-cyan text-sm font-medium">
-              Pledge $<span x-text="reward.minPledgeAmount"></span>
-              or more
-            </p>
-            <p class="text-gray text-sm leading-6 pb-6" x-text="reward.description"></p>
-            <p class="flex items-center gap-2 pb-6">
-              <span class="text-3.5xl font-bold" x-text="reward.stock"></span>
-              <span class="text-gray">left</span>
-            </p>
-            <button type="button" x-show="reward.stock != 0" class="rounded-full bg-cyan font-bold px-8 py-3.5 text-sm text-white text-center" x-on:click="makePledge(reward.id)">Select Reward</button>
-            <span x-show="reward.stock === 0" class="inline-flex rounded-full bg-gray/90 font-bold px-9 py-3.5 text-sm text-white text-center">Out of Stock</span>
-            <div :class="reward.stock === 0 ? 'absolute -inset-1 bg-white rounded-md opacity-50' : 'hidden'"></div>
-          </li>
-        </template>
-      </ul>
+    <section class="lg:max-w-screen-md lg:mx-auto lg:px-5">
+      <div class="mx-6 px-6 pt-10 pb-4 bg-white rounded-lg border border-gray/10 shadow-xs shadow-gray/20 lg:max-w-screen-md lg:mx-auto lg:px-12 lg:pt-12 lg:pb-6">
+        <h2 class="font-bold text-lg leading-none pb-7 lg:text-xl lg:pb-9">About this project</h2>
+        <p class="text-gray text-sm leading-6 pb-6 lg:text-base lg:leading-7.5 lg:pb-8">The Mastercraft Bamboo Monitor Riser is a sturdy and stylish platform that elevates your screen
+      to a more comfortable viewing height. Placing your monitor at eye level has the potential to improve
+      your posture and make you more comfortable while at work, helping you stay focused on the task at hand.</p>
+        <p class="text-gray text-sm leading-6 pb-9 lg:text-base lg:leading-7.5 lg:pb-10">Featuring artisan craftsmanship, the simplicity of design creates extra desk space below your computer
+      to allow notepads, pens, and USB sticks to be stored under the stand.</p>
+        <ul>
+          <template x-for="reward in rewards">
+            <li :class="reward.minPledgeAmount < 1 ? 'hidden' : 'relative border border-gray/20 rounded-md p-6 mb-6 lg:rounded-lg lg:p-7'">
+              <div class="lg:flex lg:items-baseline lg:justify-between lg:gap-2">
+                <h3 class="font-bold text-sm leading-none lg:text-lg" x-text="reward.title"></h3>
+                <p class="pt-2 pb-6 text-cyan text-sm font-medium lg:text-base">
+                  Pledge $<span x-text="reward.minPledgeAmount"></span>
+                  or more
+                </p>
+              </div>
+              <p class="text-gray text-sm leading-6 pb-6 lg:text-base lg:leading-7.5" x-text="reward.description"></p>
+              <div class="lg:flex lg:item-center lg:justify-between lg:gap-2">
+                <p class="flex items-center gap-2 pb-6 lg:pb-0">
+                  <span class="text-3.5xl font-bold" x-text="reward.stock"></span>
+                  <span class="text-gray">left</span>
+                </p>
+                <div>
+                  <button type="button" x-show="reward.stock != 0" class="rounded-full bg-cyan font-bold px-8 py-3.5 text-sm text-white text-center hover:bg-dark-cyan focus:outline-none focus:ring-2 focus:ring-cyan focus:ring-offset-2 transition ease-out duration-150" x-on:click="makePledge(reward.id)">Select Reward</button>
+                  <span x-show="reward.stock === 0" class="inline-flex rounded-full bg-gray/90 font-bold px-9 py-3.5 text-sm text-white text-center">Out of Stock</span>
+                  <div :class="reward.stock === 0 ? 'absolute -inset-1 bg-white rounded-md opacity-50' : 'hidden'"></div>
+                </div>
+              </div>
+            </li>
+          </template>
+        </ul>
+      </div>
     </section>
   </div>
 </main>
@@ -159,7 +186,7 @@
     </section>
   </footer>
 
-  <div x-show="modalActive" class="relative z-30" aria-labelledby="product-images-lightbox" role="dialog" aria-modal="true">
+  <div x-show="modalActive" class="relative z-30" aria-labelledby="pledge-reward-picker" role="dialog" aria-modal="true">
     <div
         x-show="modalActive"
         x-transition:enter="ease-out duration-300"
@@ -172,7 +199,7 @@
     ></div>
 
     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-      <div class="flex min-h-full items-end justify-center pt-28 px-6 pb-32 text-center">
+      <div class="flex min-h-full items-end justify-center pt-28 px-6 pb-32 text-center lg:max-w-screen-md lg:mx-auto lg:px-6">
         <div
             x-show="modalActive"
             x-transition:enter="ease-out duration-300"
@@ -230,7 +257,7 @@
                               :placeholder="reward.minPledgeAmount"
                           >
                         </div>
-                        <button type="button" x-on:click="submit(reward, pledgedAmount)" class="rounded-full bg-cyan font-bold px-7 py-3.5 text-sm text-white text-center">Continue</button>
+                        <button type="button" x-on:click="submit(reward, pledgedAmount)" class="rounded-full bg-cyan font-bold px-7 py-3.5 text-sm text-white text-center hover:bg-dark-cyan focus:outline-none focus:ring-2 focus:ring-cyan focus:ring-offset-2 transition ease-out duration-150">Continue</button>
                       </div>
                     </div>
                     <div :class="reward.stock === 0 ? 'absolute -inset-1 bg-white rounded-lg opacity-50' : 'hidden'"></div>
