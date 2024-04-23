@@ -231,7 +231,7 @@
                             class="flex gap-4 items-center px-6 lg:px-7 lg:gap-7"
                     >
                       <div x-show="reward.stock != 0" class="grid place-items-center">
-                        <input class="relative appearance-none cursor-pointer rounded-full ring-2 ring-gray/20 w-5 h-5 focus:outline-none focus:ring-cyan" type="radio" name="selectReward" value="reward.id" id="reward.id" x-model="selectedRewardId" x-on:input="selectedRewardId = reward.id">
+                        <input class="relative appearance-none cursor-pointer rounded-full ring-2 ring-gray/20 w-5 h-5 focus:outline-none focus:ring-cyan" type="radio" name="selectReward" :value="reward.id" :id="reward.id" x-model="selectedRewardId" x-on:input="selectedRewardId = reward.id">
                         <span x-show="selectedRewardId === reward.id" class="absolute w-3 h-3 rounded-full bg-cyan pointer-events-none"></span>
                       </div>
                       <span x-show="reward.stock === 0" class="block rounded-full ring-2 ring-gray/20 w-5 h-5"></span>
